@@ -55,7 +55,9 @@ M.register = function(name, config)
   if not config.func then
     config.func = function(client, data)
       local mod = require("obsidian.commands." .. name)
-      return mod(client, data)
+      coroutine.wrap(function()
+        mod(client, data)
+      end)()
     end
   end
   M.commands[name] = config

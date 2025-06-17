@@ -42,6 +42,7 @@ end
 ---@param ctx obsidian.TemplateContext
 ---
 ---@return string
+---@async
 M.substitute_template_variables = function(text, ctx)
   local methods = vim.deepcopy(ctx.template_opts.substitutions or {})
 

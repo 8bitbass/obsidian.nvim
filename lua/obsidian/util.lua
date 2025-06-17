@@ -730,4 +730,41 @@ util.buffer_fn = function(fn)
   end
 end
 
+--- Converts a callback-based function to a coroutine function.
+---
+---@param f function The function to convert.
+---                  The callback needs to be its first argument.
+---@return function A fire-and-forget coroutine function.
+---                 Accepts the same arguments as f without the callback.
+---                 Returns what f has passed to the callback.
+util.cb_to_co = function(f)
+  local f_co = function(...)
+    local this = coroutine.running()
+    assert(this ~= nil, "The result of cb_to_co must be called within a coroutine.")
+
+    local f_status = "running"
+    local f_ret = nil
+    -- f needs to have the callback as its first argument, because varargs
+    -- passing doesn’t work otherwise.
+    f(function(ret)
+      f_status = "done"
+      f_ret = ret
+      if coroutine.status(this) == "suspended" then
+        -- If we are suspended, then f_co has yielded control after calling f.
+        -- Use the caller of this callback to resume computation until the next yield.
+        coroutine.resume(this)
+      end
+    end, ...)
+    if f_status == "running" then
+      -- If we are here, then `f` must not have called the callback yet, so it
+      -- will do so asynchronously.
+      -- Yield control and wait for the callback to resume it.
+      coroutine.yield()
+    end
+    return f_ret
+  end
+
+  return f_co
+end
+
 return util

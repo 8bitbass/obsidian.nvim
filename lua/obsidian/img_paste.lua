@@ -103,7 +103,8 @@ end
 ---  - `default_name`: The default name to assign the image.
 ---  - `should_confirm`: Prompt to confirm before proceeding.
 ---
---- @return obsidian.Path|? image_path The absolute path to the image file.
+---@return obsidian.Path|? image_path The absolute path to the image file.
+---@async
 M.paste_img = function(opts)
   opts = opts or {}
 

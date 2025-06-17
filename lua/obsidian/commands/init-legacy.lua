@@ -55,7 +55,9 @@ local M = setmetatable({
 M.register = function(name, config)
   if not config.func then
     config.func = function(client, data)
-      return M[name](client, data)
+      coroutine.wrap(function()
+        M[name](client, data)
+      end)()
     end
   end
   M.commands[name] = config

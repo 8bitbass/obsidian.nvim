@@ -423,14 +423,12 @@ end
 --- UI helpers ---
 ------------------
 
-local INPUT_CANCELLED = "~~~INPUT-CANCELLED~~~"
-
 --- Prompt user for an input. Returns nil if canceled, otherwise a string (possibly empty).
 ---
 ---@param prompt string
 ---@param opts { completion: string|?, default: string|? }|?
----
 ---@return string|?
+---@async
 M.input = function(prompt, opts)
   opts = opts or {}
 
@@ -438,22 +436,22 @@ M.input = function(prompt, opts)
     prompt = prompt .. " "
   end
 
-  local input = vim.trim(
-    vim.fn.input { prompt = prompt, completion = opts.completion, default = opts.default, cancelreturn = INPUT_CANCELLED }
-  )
-
-  if input ~= INPUT_CANCELLED then
-    return input
-  else
-    return nil
-  end
+  return util.cb_to_co(function(cb)
+    vim.ui.input({ prompt = prompt, completion = opts.completion, default = opts.default }, function(input)
+      if input == "" then
+        cb(nil)
+      else
+        cb(input)
+      end
+    end)
+  end)()
 end
 
 --- Prompt user for a confirmation.
 ---
 ---@param prompt string
----
 ---@return boolean
+---@async
 M.confirm = function(prompt)
   if not vim.endswith(util.rstrip_whitespace(prompt), "[Y/n]") then
     prompt = util.rstrip_whitespace(prompt) .. " [Y/n] "
