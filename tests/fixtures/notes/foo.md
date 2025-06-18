@@ -1,9 +1,10 @@
 ---
 id: foo
 aliases:
- - foo
- - Foo
-tags: []
+  - foo
+  - Foo
+tags:
+  - tag
 ---
 
 # foo

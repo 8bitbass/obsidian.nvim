@@ -31,4 +31,6 @@ M.with_tmp_client = function(f, dir, opts)
   end
 end
 
+M.fixtures = vim.fs.joinpath(vim.uv.cwd(), "tests", "fixtures", "notes")
+
 return M

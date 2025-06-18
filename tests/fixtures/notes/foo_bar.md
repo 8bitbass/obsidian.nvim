@@ -9,4 +9,5 @@ tags: []
 
 # foo
 
-This is some content.
+This is some content. #tag
+
