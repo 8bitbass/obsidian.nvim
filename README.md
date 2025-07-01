@@ -124,6 +124,7 @@ For remapping and creating your own mappings, see [Keymaps](https://github.com/o
 
 - Neovim >= 0.10.0
 - For completion and search features:
+
   - Backend: [ripgrep](https://github.com/BurntSushi/ripgrep), see [ripgrep#installation](https://github.com/BurntSushi/ripgrep)
   - Frontend: a picker, see [Plugin dependencies](#plugin-dependencies)
 
@@ -593,6 +594,14 @@ require("obsidian").setup {
   statusline = {
     enabled = true,
     format = "{{properties}} properties {{backlinks}} backlinks {{words}} words {{chars}} chars",
+  },
+
+  ---@class obsidian.config.CheckboxOpts
+  ---
+  ---Order of checkbox state chars, e.g. { " ", "x" }
+  ---@field order? string[]
+  checkbox = {
+    order = { " ", "~", "!", ">", "x" },
   },
 }
 ```
