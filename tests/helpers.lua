@@ -31,4 +31,26 @@ M.with_tmp_client = function(f, dir, opts)
   end
 end
 
+M.temp_vault = MiniTest.new_set {
+  hooks = {
+    pre_case = function()
+      local dir = Path.temp { suffix = "-obsidian" }
+      dir:mkdir { parents = true }
+      require("obsidian").setup {
+        workspaces = { {
+          path = tostring(dir),
+        } },
+        templates = {
+          folder = "templates",
+        },
+      }
+
+      Path.new(dir / "templates"):mkdir()
+    end,
+    post_case = function()
+      vim.fn.delete(tostring(Obsidian.dir), "rf")
+    end,
+  },
+}
+
 return M
