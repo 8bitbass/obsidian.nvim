@@ -6,8 +6,7 @@ local api = require "obsidian.api"
 return function(client)
   local picker = Obsidian.picker
   if not picker then
-    log.err "No picker configured"
-    return
+    return log.err "No picker configured"
   end
 
   local note = api.current_note(0)
