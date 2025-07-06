@@ -228,7 +228,6 @@ end
 ---Get the tag under the cursor, if there is one.
 ---@return string?
 M.cursor_tag = function()
-  local search = require "obsidian.search"
   local current_line = vim.api.nvim_get_current_line()
   local _, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
   cur_col = cur_col + 1 -- nvim_win_get_cursor returns 0-indexed column
