@@ -176,7 +176,6 @@ end
 ---@param include_block_ids boolean|?
 ---@return integer|nil, integer|nil, obsidian.search.RefTypes|? - start and end column of link (1-indexed)
 M.cursor_on_markdown_link = function(line, col, include_naked_urls, include_file_urls, include_block_ids)
-  local search = require "obsidian.search"
   local current_line = line or vim.api.nvim_get_current_line()
   local _, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
   cur_col = col or cur_col + 1 -- nvim_win_get_cursor returns 0-indexed column
