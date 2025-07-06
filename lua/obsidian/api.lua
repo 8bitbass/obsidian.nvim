@@ -3,6 +3,7 @@ local log = require "obsidian.log"
 local util = require "obsidian.util"
 local iter, string, table = vim.iter, string, table
 local Path = require "obsidian.path"
+local search = require "obsidian.search"
 
 --- Get the templates folder.
 ---
@@ -625,6 +626,58 @@ end
 ---@return string
 M.resolve_image_path = function(src)
   return vim.fs.joinpath(tostring(Obsidian.dir), Obsidian.opts.attachments.img_folder, src)
+end
+
+--------------------------
+---- Mapping functions ---
+--------------------------
+
+---@param direction "next" | "prev"
+M.nav_link = function(direction)
+  vim.validate("direction", direction, "string", false, "nav_link must be called with a direction")
+  local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
+  local Note = require "obsidian.note"
+
+  search.find_links(Note.from_buffer(0), {}, function(matches)
+    if direction == "next" then
+      for i = 1, #matches do
+        local match = matches[i]
+        if (match.line > cursor_line) or (cursor_line == match.line and cursor_col < match.start) then
+          return vim.api.nvim_win_set_cursor(0, { match.line, match.start })
+        end
+      end
+    end
+
+    if direction == "prev" then
+      for i = #matches, 1, -1 do
+        local match = matches[i]
+        if (match.line < cursor_line) or (cursor_line == match.line and cursor_col > match.start) then
+          return vim.api.nvim_win_set_cursor(0, { match.line, match.start })
+        end
+      end
+    end
+  end)
+end
+
+M.smart_action = function()
+  local legacy = Obsidian.opts.legacy_commands
+  -- follow link if possible
+  if M.cursor_on_markdown_link(nil, nil, true) then
+    return legacy and "<cmd>ObsidianFollowLink<cr>" or "<cmd>Obsidian follow_link<cr>"
+  end
+
+  -- show notes with tag if possible
+  if M.cursor_tag() then
+    return legacy and "<cmd>ObsidianTags<cr>" or "<cmd>Obsidian tags<cr>"
+  end
+
+  if M.cursor_heading() then
+    return "za"
+  end
+
+  -- toggle task if possible
+  -- cycles through your custom UI checkboxes, default: [ ] [~] [>] [x]
+  return legacy and "<cmd>ObsidianToggleCheckbox<cr>" or "<cmd>Obsidian toggle_checkbox<cr>"
 end
 
 return M
