@@ -14,8 +14,8 @@ return function(_, data)
     local title = table.concat(data.fargs, " ", 1, #data.fargs - 1)
     local template = data.fargs[#data.fargs]
 
-    if template ~= nil and title == nil or title == "" then
-        local success, safe_title = pcall(util.input, "Enter title or path (optional): ", { completion = "file" })
+    if title == nil or title == "" and template ~= nil then
+        local success, safe_title = pcall(util.input, "Enter " .. template .. " title or path (optional): ", { completion = "file" })
         title = safe_title
         if not success or not safe_title then
             log.warn("Aborted")
@@ -56,6 +56,7 @@ return function(_, data)
                 return
             end
 
+            print(template_name)
             ---@type obsidian.Note
             local note = Note.create({ title = title, template = template_name, should_write = true })
             note:open({ sync = false })

@@ -282,6 +282,7 @@ Client.find_tags_async = function(self, term, callback, opts)
 
   ---@param match_data MatchData
   local on_match = function(match_data)
+    -- print(vim.inspect(match_data))
     local path = Path.new(match_data.path.text):resolve { strict = true }
 
     if path_order[path] == nil then
@@ -361,11 +362,13 @@ Client.find_tags_async = function(self, term, callback, opts)
       -- tag in the wild
       search_terms[#search_terms + 1] = "#" .. search.Patterns.TagCharsRequired
       -- frontmatter tag in multiline list
-      search_terms[#search_terms + 1] = "\\s*- " .. search.Patterns.TagCharsRequired .. "$"
+      search_terms[#search_terms + 1] = "\\s*- " .. search.Patterns.TagCharsRequired .. "\\b"
       -- frontmatter tag in inline list
       search_terms[#search_terms + 1] = "tags: .*" .. search.Patterns.TagCharsRequired
     end
   end
+
+  -- print(vim.inspect(search_terms))
 
   search.search_async(
     Obsidian.dir,
@@ -664,7 +667,8 @@ Client.list_tags_async = function(self, term, callback)
   self:find_tags_async(term and term or "", function(tag_locations)
     local tags = {}
     for _, tag_loc in ipairs(tag_locations) do
-      local tag = tag_loc.tag:lower()
+      -- local tag = tag_loc.tag:lower()
+      local tag = tag_loc.tag
       if not tags[tag] then
         tags[tag] = true
       end

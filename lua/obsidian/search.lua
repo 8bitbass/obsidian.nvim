@@ -465,8 +465,10 @@ end
 ---@param on_exit fun(exit_code: integer)|?
 M.search_async = function(dir, term, opts, on_match, on_exit)
   local cmd = M.build_search_cmd(dir, term, opts)
+  -- print(vim.inspect(cmd))
   run_job_async(cmd, function(line)
     local data = vim.json.decode(line)
+    -- print(vim.inspect(data))
     if data["type"] == "match" then
       local match_data = data.data
       on_match(match_data)
