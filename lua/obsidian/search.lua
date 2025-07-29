@@ -679,6 +679,10 @@ local _resolve_note_async = function(query, callback, opts)
 
   local paths_to_check = { Path.new(fname), Obsidian.dir / fname }
 
+  if Obsidian.opts.archive_subdir ~= nil then
+    paths_to_check[#paths_to_check + 1] = Obsidian.dir / Obsidian.opts.archive_subdir / fname
+  end
+
   if Obsidian.opts.notes_subdir ~= nil then
     paths_to_check[#paths_to_check + 1] = Obsidian.dir / Obsidian.opts.notes_subdir / fname
   end

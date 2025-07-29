@@ -166,6 +166,11 @@ Workspace.set = function(workspace, opts)
     (dir / options.templates.folder):mkdir { parents = true }
   end
 
+  if options.archive_subdir ~= nil then
+    local archive_subdir = dir / Obsidian.opts.archive_subdir
+    archive_subdir:mkdir { parents = true, exists_ok = true }
+  end
+
   if options.daily_notes.folder then
     (dir / options.daily_notes.folder):mkdir { parents = true }
   end

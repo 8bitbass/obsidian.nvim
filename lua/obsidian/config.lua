@@ -6,6 +6,7 @@ local config = {}
 ---@field workspaces obsidian.workspace.WorkspaceSpec[]
 ---@field log_level? integer
 ---@field notes_subdir? string
+---@field archive_subdir? string
 ---@field templates? obsidian.config.TemplateOpts
 ---@field new_notes_location? obsidian.config.NewNotesLocation
 ---@field note_id_func? (fun(title: string|?, path: obsidian.Path|?): string)|?
@@ -40,6 +41,7 @@ local config = {}
 ---@field workspaces obsidian.workspace.WorkspaceSpec[]|?
 ---@field log_level integer
 ---@field notes_subdir string|?
+---@field archive_subdir string|?
 ---@field templates obsidian.config.TemplateOpts
 ---@field new_notes_location obsidian.config.NewNotesLocation
 ---@field note_id_func (fun(title: string|?, path: obsidian.Path|?): string)|?
@@ -114,6 +116,7 @@ config.default = {
   workspaces = {},
   log_level = vim.log.levels.INFO,
   notes_subdir = nil,
+  archive_subdir = nil,
   new_notes_location = config.NewNotesLocation.current_dir,
   note_id_func = nil,
   wiki_link_func = require("obsidian.builtin").wiki_link_id_prefix,

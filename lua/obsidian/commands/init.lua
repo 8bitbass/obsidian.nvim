@@ -246,6 +246,8 @@ M.register("workspace", { nargs = "?" })
 ---- note action ----
 ---------------------
 
+M.register("archive", { nargs = "?", note_action = true })
+
 M.register("backlinks", { nargs = 0, note_action = true })
 
 M.register("template", { nargs = "?", note_action = true })
