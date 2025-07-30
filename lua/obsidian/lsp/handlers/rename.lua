@@ -34,7 +34,7 @@ local function build_search_lookup(old, new)
   local replace_lookup = {}
 
   for _, pat in ipairs(ref_patterns) do
-    replace_lookup[pat:format(old.id)] = pat:format(new.id)
+    -- replace_lookup[pat:format(old.id)] = pat:format(new.id)
     replace_lookup[pat:format(old.rel_path)] = pat:format(new.rel_path)
     replace_lookup[pat:format(old.rel_path:sub(1, -4))] = pat:format(new.rel_path:sub(1, -4))
   end
@@ -55,7 +55,7 @@ local function info_from_uri(uri)
   return {
     rel_path = rel_path,
     path = path,
-    id = id,
+    -- id = id,
   }
 end
 
@@ -74,7 +74,7 @@ local function info_from_id(id, old_path)
   return {
     rel_path = rel_path,
     path = path,
-    id = id,
+    -- id = id,
   }
 end
 
@@ -142,7 +142,7 @@ local function rename_note(uri, new_name, target)
 
   log.info("renamed " .. count .. " reference(s) across " .. vim.tbl_count(file_map) .. " file(s)")
 
-  target.id = new.id
+  -- target.id = new.id
   target.path = Path.new(new.path)
   target:save_to_buffer { bufnr = target.bufnr }
 
@@ -170,6 +170,7 @@ local function validate_new_name(name)
   return true
 end
 
+-- TODO: if rename happens while on ID line, rename id not file
 ---@param params lsp.RenameParams
 return function(params, _, _)
   local new_name = params.newName

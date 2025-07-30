@@ -940,6 +940,19 @@ Note.frontmatter_lines = function(self, eol, frontmatter)
   end
 end
 
+--- Force update the frontmatter in a buffer for the note, even if normally this note wouldn't get frontmatter.
+---
+---@param bufnr integer|?
+---
+---@return boolean updated If the the frontmatter was updated.
+Note.force_update_frontmatter = function(self, bufnr)
+  local frontmatter = nil
+  if Obsidian.opts.note_frontmatter_func ~= nil then
+    frontmatter = Obsidian.opts.note_frontmatter_func(self)
+  end
+  return self:save_to_buffer { bufnr = bufnr, frontmatter = frontmatter }
+end
+
 --- Update the frontmatter in a buffer for the note.
 ---
 ---@param bufnr integer|?

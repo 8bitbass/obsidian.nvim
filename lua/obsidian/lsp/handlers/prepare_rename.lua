@@ -14,7 +14,12 @@ return function(_, handler)
   else
     local note = api.current_note(0)
     assert(note, "not in a obsidian note")
-    placeholder = api.current_note().id
+    local ph = note.path.stem
+    if ph then
+      placeholder = ph
+    else
+      placeholder = api.current_note().id
+    end
   end
 
   handler(nil, {
